@@ -23,6 +23,10 @@ class Solution(object):
             else:
                 break
         return digits
+    
+    def plusOne2(self, digits: 'list[int]') -> 'list[int]':
+        num = int(''.join(map(str, digits)))
+        return [int(d) for d in str(num + 1)]
 
 
 test = Solution()
