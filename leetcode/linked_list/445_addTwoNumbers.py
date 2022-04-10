@@ -21,10 +21,10 @@ class Solution:
             v2 = v2 * 10 + l2.val
             l2 = l2.next
         v = v1 + v2
-        print(v)
         cur = head = ListNode(0)
         for i in str(v):
             cur.next = ListNode(int(i))
+            cur = cur.next
         return head.next
 
 
