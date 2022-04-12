@@ -15,10 +15,17 @@ class Solution:
         None of the pointers in the new list should point to nodes in the original list.
 
         '''
-        l = head
-        while head:
-            l.next = head.next
-            l = l.next
+        collect = {}
+
+        l1 = l2 = head
+        while l1:
+            collect[l1] = Node(l1.val)
+            l1 = l1.next
+        while l2:
+            collect[l2].next = collect.get(l2.next)
+            collect[l2].random = collect.get(l2.random)
+            l2 = l2.next
+        return collect.get(head)
 
 
 test = Solution()
