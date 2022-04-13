@@ -13,7 +13,6 @@ class Solution:
         ans = 0
         for t in time:
             ans += c[-t % 60]
-            print(t % 60)
             c[t%60] += 1
         return ans
         
