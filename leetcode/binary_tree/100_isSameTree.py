@@ -17,17 +17,24 @@ class Solution:
     def isSameTree(self, p, q) -> bool:
         
         def sameNode(nodep, nodeq):
+            if not (nodep and nodeq):
+                if nodep == nodeq == None:
+                    return True
+                else:
+                    return False
+        
             if nodep.val != nodeq.val:
                 return False
+            
             l = sameNode(nodep.left, nodeq.left)
             r = sameNode(nodep.right, nodeq.right)
             if not (l and r):
                 return False
             return True
         
-        sameNode(p, q)
+        ans = sameNode(p, q)
         
-        return True
+        return ans
 
 test = Solution()
 a = [1,None,2,3]
