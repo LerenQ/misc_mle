@@ -15,13 +15,18 @@ class Solution:
 
     """
     def minDepth(self, root) -> int:
-
-        if not (root.left or root.right):
-            return 0
         if root:
+            if (root.left and root.right):
+                return min(self.minDepth(root.left), self.minDepth(root.right)) + 1
+            elif not (root.left or root.right):
+                return 1
+            elif root.left:
+                return self.minDepth(root.left) + 1
+            elif root.right:
+                return self.minDepth(root.right) + 1
+        else:
+            return 0
             
-        return min(self.minDepth(root.left), self.minDepth(root.right)) + 1
-    
 
 test = Solution()
 a = [1,3,2,3]
