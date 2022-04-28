@@ -13,24 +13,23 @@ class Solution:
 
         
         '''       
-        ans = 0
-        for i in range(32):
-            count = 0
-            for num in nums:
-                if ((num >> i) & 1):
-                    count += 1
-            ans |= ((count%3!=0) << i)
-        return self.convert(ans)
-    
-    def convert(self, x):
-            if x >= 2**31:
-                x -= 2**32
-            return x
+        mask = 1
+        sumtwo = self.xor(nums)
+        while sumtwo&mask == 0:
+            mask <<= 1
+        n1 = [num for num in nums if mask&num != 0]
+        n2 = [num for num in nums if mask&num == 0]
+        return [self.xor(n1), self.xor(n2)]
+
+
+    def xor(self,n):
+        from functools import reduce
+        return reduce(lambda x, y: x ^ y, n)
 
         
 
 
 test = Solution()
-nums = [0,1,0,1,0,1,99]
+nums = [0,1,0,1,99,98]
 ans = test.singleNumber(nums)
 print(ans)
