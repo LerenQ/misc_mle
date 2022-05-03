@@ -15,26 +15,19 @@ class Solution:
         For example, there will not be input like 3a or 2[4].
         
         '''
-        ans = ''
-        pstack, d, c = [], [], []
+        stack, d, ans, cur = [], [], '', ''
         for i in s:
-            if i.isdigit():
-                if i.d[-1]
-                    d[-1] += i
-            elif i == '[':
-                pstack.append(i)
+            if i == '[':
+                d.append(cur)
+                cur = ''
+                stack.append(ans)
+                ans = ''
             elif i == ']':
-                pstack.pop()
-                tmp = int(d[-1])*str(c[-1])
-                d.pop()
-                c.pop()
-                if c:
-                    c[-1] += tmp
-                else:
-                    ans += tmp
+                ans = stack.pop() + int(d.pop()) * ans
+            elif i.isdigit():
+                cur += i
             else:
-
-
+                ans += i
         return ans
 
     
@@ -42,6 +35,7 @@ class Solution:
 obj = Solution()
 s = "3[a]23[bc]"
 s = "3[a2[c]]2[bc]"
+s = "3[z]2[2[y]pq4[2[jk]e1[f]]]ef"
 ans = obj.decodeString(s)
 print(ans)
 
