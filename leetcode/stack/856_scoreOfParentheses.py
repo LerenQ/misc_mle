@@ -17,8 +17,6 @@ class Solution:
         return res
                 
             
-    
-
 obj = Solution()
 s = "(())()"
 s = "(()(()))"
