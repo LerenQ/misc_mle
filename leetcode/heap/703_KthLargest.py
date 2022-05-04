@@ -1,3 +1,4 @@
+import bisect
 class KthLargest:
     '''
     Design a class to find the kth largest element in a stream. 
@@ -7,16 +8,18 @@ class KthLargest:
 
         KthLargest(int k, int[] nums) Initializes the object 
         with the integer k and the stream of integers nums.
-        
+
         int add(int val) Appends the integer val to the stream and 
         returns the element representing the kth largest element in the stream.
     
     '''
 
     def __init__(self, k: int, nums: 'list[int]'):
-        
+        self.l = sorted(nums)
+        self.k = k
 
     def add(self, val: int) -> int:
-        
+        bisect.insort(self.l, val)
+        return self.l[-self.k]        
 
     
