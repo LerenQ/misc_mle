@@ -21,7 +21,7 @@ class Solution:
                 i = min(maxd[0][1], mind[0][1]) + 1
                 while maxd[0][1] < i: heapq.heappop(maxd)
                 while mind[0][1] < i: heapq.heappop(mind)
-            # print(maxd, '--', mind)
+            print(maxd, '--', mind)
             res = max(res, j - i + 1)
         return res
 
@@ -29,9 +29,9 @@ class Solution:
 
 
 obj = Solution()
-nums = [4,2,2,2,4,4,2,2]
-nums = [10,1,2,4,7,2]
+nums = [7,7,3,2,-7,3,2,2]
+# nums = [10,1,2,4,7,2]
 limit = 0
-limit = 5
+limit = 1
 ans = obj.longestSubarray(nums, limit)
 print(ans)
