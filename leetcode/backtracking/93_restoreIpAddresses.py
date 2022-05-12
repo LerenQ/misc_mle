@@ -35,5 +35,6 @@ class Solution:
 
 obj = Solution()
 s = "25525511135"
+s= "010010"
 ans = obj.restoreIpAddresses(s)
 print(ans)
