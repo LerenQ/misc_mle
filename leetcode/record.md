@@ -15,9 +15,7 @@ dynamic programming
 ## planning
 
 May
-11 review dijkistra minheap, review array + 10
-12
-13
-14
+13, review backtrack; review array + 5
+14, review array + 5
 15
 16
