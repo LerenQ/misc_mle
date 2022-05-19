@@ -71,3 +71,26 @@ select(
     limit 1 offset 1
     ) as SecondHighestSalary 
 
+/*#197. Rising Temperature */
+select w2.id
+from Weather w1
+left join Weather w2
+on DATEDIFF(w2.recordDate, w1.recordDate) = 1
+where w2.temperature > w1.temperature
+
+/*#196. Delete Duplicate Emails */
+delete p1
+from Person p1, Person p2
+where p1.email = p2.email and p1.id > p2.id
+
+/*#626. Delete Duplicate Emails */
+select s1.id, Coalesce(s2.student, s1.student) as student
+from Seat s1
+left join Seat s2
+on (s1.id + 1)^1-1 = s2.id
+order by s1.id;
+
+/*#178. Rank Scores */
+SELECT score, DENSE_RANK() OVER(ORDER BY score DESC) AS 'rank'
+FROM Scores
+
