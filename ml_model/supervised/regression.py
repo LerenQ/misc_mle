@@ -4,6 +4,10 @@ import pandas as pd
 import statsmodels.api as sm
 from functools import reduce
 
+'''
+statsmodel:
+https://www.statsmodels.org/dev/_modules/statsmodels/regression/linear_model.html#OLS.fit_regularized
+'''
 
 class OLS:
 
