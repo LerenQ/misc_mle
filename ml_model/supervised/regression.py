@@ -90,6 +90,80 @@ class Ridge(OLS):
         self.beta = np.linalg.multi_dot([np.linalg.inv(exog_dot + np.identity(exog_dot.shape[0])*self.lamda), self.X.T, self.Y])
 
 
+class LogisticRegr(OLS):
+    '''file:///Users/qianleren/Google%20Drive/82.0_Computer%20Vision/assignment_1.html
+    issue: not comply with statmodel and sklearn
+    '''
+
+    def __init__(self, X: 'list(list())', Y: list(), random_seed: int = None) -> None:
+        '''take X without constant'''
+        super().__init__(X, Y, random_seed)
+        self.w = np.random.rand(X.shape[1],1)*0.01
+        self.b = 0
+
+    def fit(self, learning_rate=0.001, num_iterations=2000, print_cost=False):
+        params,grads,losses = self._optimize(self.w,self.b,self.X,self.Y,num_iterations,learning_rate,print_cost)
+        self.w = params['w']
+        self.b = params['b']
+
+    def predict(self, X):
+        n = X.shape[0]
+        Y_prediction = np.zeros((n,1))
+        A = self._sigmoid(np.dot(X, self.w)+self.b)
+        for i in range(n):
+            if A[i, 0]>0.5:
+                Y_prediction[i,0] = 1
+            else:
+                Y_prediction[i,0] = 0
+        return Y_prediction
+
+    def pseudoR2(self):
+        '''McFadden R2'''
+        return
+
+    def _sigmoid(self, z):
+        return 1/(1+ np.exp(-z))
+
+    def _logistic_loss(self, A, Y):
+        m = A.shape[0]
+        return (-1/m) * np.sum(Y*np.log(A)+ (1-Y)*np.log(1-A))
+
+    def _propagate(self, w, b, X, Y):
+        # w:(d,1), b(1), X(n,d), Y(n,1), A(n,1)
+        n = X.shape[0]
+        # forward, loss function derived from MLE, refer: https://blog.csdn.net/mengjizhiyou/article/details/103117274
+        A = self._sigmoid(np.dot(X, w)+b)
+        loss = self._logistic_loss(A,Y)
+
+        # backprop：dZ(n,1), dw(d,1), db(1)
+        dZ = (A - Y)
+        dw = (np.dot(X.T,dZ))/n
+        db = (np.sum(dZ))/n
+
+        grads = {"dw": dw,"db": db}
+        return grads, loss
+    
+    def _optimize(self, w, b, X, Y, num_iterations, learning_rate, print_cost = False):
+        losses = []
+        for i in range(num_iterations):
+            grads, loss = self._propagate(w,b,X,Y)
+            dw = grads["dw"]
+            db = grads["db"]
+            # update params：
+            w = w - learning_rate*dw
+            b = b - learning_rate*db
+
+            # view loss every 100 iters
+            if i % 100 == 0:
+                losses.append(loss)
+            if print_cost and i % 100 == 0:
+                print ("loss after iteration %i: %f" %(i, loss))
+        
+        # put in history
+        params = {"w": w, "b": b}
+        grads = {"dw": dw, "db": db}
+        return params, grads, losses
+
 # read data
 data = pd.read_csv('../data/Mall_Customers.csv',index_col='CustomerID')
 data.drop_duplicates(inplace=True)
@@ -109,10 +183,10 @@ Y = np.squeeze(data.iloc[:, [1]].values)[:,np.newaxis]
 # print(obj.rsquare_adj())
 # print(sum((obj.Y-obj.Ybar)**2))
 
-# compare with statmodel
-X1 = sm.add_constant(X0)
-mod = sm.OLS(Y, X1)
-res = mod.fit()
+# # compare with statmodel
+# X1 = sm.add_constant(X0)
+# mod = sm.OLS(Y, X1)
+# res = mod.fit()
 # print(res.summary())
 # print(res.params)
 # print(res.predict())
@@ -140,3 +214,23 @@ res = mod.fit()
 # obj = Ridge(X, Y,lamda=0)
 # obj.fit()
 # print(obj.predict(X))
+
+# # test Logistic regression
+# from sklearn.datasets import load_boston
+# data = load_boston()
+# X_lr = data.data[:, [0,5,6,12]]
+# Y_lr = data.data[:, [3]]
+# obj = LogisticRegr(X_lr, Y_lr)
+# obj.fit(learning_rate=0.001, num_iterations=2000, print_cost=True)
+# print(obj.w, obj.b)
+# # print(obj.predict(X_lr))
+# # print(len([i[0] for i in obj.predict(X_lr) if i[0] == 0.]))
+
+# # compare Logistic regression with statmodel, and sklearn
+# X_lr1 = sm.add_constant(X_lr)
+# log_reg = sm.Logit(Y_lr, X_lr1).fit()
+# print(log_reg.summary())
+# # print(log_reg.predict())
+# from sklearn.linear_model import LogisticRegression
+# model = LogisticRegression(random_state=0, penalty='none',C=1e9, solver='lbfgs').fit(X_lr, Y_lr)
+# print(model.coef_)
